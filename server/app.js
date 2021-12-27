@@ -1,12 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const serverless = require("serverless-http");
 const cors = require("cors");
 const detailRoute = require("./routes/detailRoutes");
 const url =
   "mongodb+srv://vinod:vinod@cluster0.mtkf1.mongodb.net/InvestWithTribe";
 
 const app = express();
-
+const router = express.Router();
 mongoose
   .connect(url, {
     useNewUrlParser: true,
@@ -30,3 +31,6 @@ app.listen(9000, () => {
     console.log("Error connecting server ..", err);
   }
 });
+app.use('/.netlify/functions/server', router);
+module.exports = app;
+module.exports.handler = serverless(app);
